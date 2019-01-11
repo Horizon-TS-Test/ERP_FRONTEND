@@ -178,7 +178,12 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.showCloseFilterBtn = true;
+    if(filterText.length > 0) {
+      this.showCloseFilterBtn = true;
+    }
+    else {
+      this.showCloseFilterBtn = false;
+    }
 
     setTimeout(() => {
       this.filtering = false;
