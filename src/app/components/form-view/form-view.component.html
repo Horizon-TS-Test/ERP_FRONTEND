@@ -1,0 +1,41 @@
+<div class="personal-detail-view card" [ngClass]="{
+  'show': startAnimation,
+  'panel-alert': formView.alertType != undefined
+}">
+  <div class="card-header" [ngClass]="{
+    'success-msg': formView.alertType == actionTypes.success,
+    'info-msg': formView.alertType == actionTypes.info,
+    'warning-msg': formView.alertType == actionTypes.warning,
+    'danger-msg': formView.alertType == actionTypes.danger
+  }">
+    {{ formView.title }}
+  </div>
+
+  <div class="detail-message card-block alert mb-1" [ngClass]="{
+      'alert-success': formView.alertType == actionTypes.success,
+      'alert-info': formView.alertType == actionTypes.info,
+      'alert-warning': formView.alertType == actionTypes.warning,
+      'alert-danger': formView.alertType == actionTypes.danger
+    }">
+    <fa *ngIf="formView.alertType == actionTypes.success" name="check-circle" class="mr-2"></fa>
+    <fa *ngIf="formView.alertType == actionTypes.info" name="exclamation-circle" class="mr-2"></fa>
+    <fa *ngIf="formView.alertType == actionTypes.warning" name="warning" class="mr-2"></fa>
+    <fa *ngIf="formView.alertType == actionTypes.danger" name="times-circle" class="mr-2"></fa>
+    {{ formView.alertMsg }}
+  </div>
+
+  <ul class="list-group list-group-flush pb-0">
+    <li *ngFor="let inputGroup of formView.inputGroup" class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="p-ilustration">
+        <fa name="{{ inputGroup.icon }}"></fa>
+      </div>
+
+      <div class="f-child-no-auto ml-1 row">
+        <div *ngFor="let inputForm of inputGroup.inputFormList" class="{{ inputForm.inputData.dimensionClass }}">
+          <dyna-input [inputForm]="inputForm" [parentForm]="form" [pushedInputValue]="pushedInputValue" [showError]="showInputError" (changedInput)="getChangedInput($event)"></dyna-input>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+</div>

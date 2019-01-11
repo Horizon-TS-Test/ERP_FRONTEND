@@ -1,0 +1,7 @@
+<!-- REF: https://www.abeautifulsite.net/bootstrap-4-switches -->
+<div class="form-group mb-0">
+  <span class="switch switch-sm {{ switchInput.customClass }}">
+    <input type="checkbox" class="switch" id="{{ switchInput.id }}" [checked]="switchInput.checked" (click)="switchChange($event)">
+    <label for="{{ switchInput.id }}" class="mb-0">{{ switchInput.label }}</label>
+  </span>
+</div>

@@ -1,0 +1,16 @@
+<div class="d-flex flex-column">
+  <a *ngFor="let btn of auxButtonList; let i = index" href="#" class="custom-btn c-animated-btn {{ btn.class }}"
+    (click)="onBtnClick($event, i)" (contextmenu)="$event.preventDefault()" [ngClass]="{
+    'custom-btn-normal': btn.appearance == btnAppearance.normal,
+    'custom-btn-white': !btn.appearance,
+    'custom-btn-success': btn.appearance == btnAppearance.success,
+    'custom-btn-info': btn.appearance == btnAppearance.info,
+    'custom-btn-warning': btn.appearance == btnAppearance.warning,
+    'custom-btn-danger': btn.appearance == btnAppearance.danger
+  }">
+    <fa *ngIf="!btn.customIcon else customIcon" name="{{ btn.icon }}"></fa>
+    <ng-template #customIcon>
+      <span class="personal-site-icon">{{ btn.icon }}</span>
+    </ng-template>
+  </a>
+</div>

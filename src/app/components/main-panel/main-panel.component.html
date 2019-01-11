@@ -1,0 +1,21 @@
+<div class="h-100 d-flex flex-column justify-content-between align-items-end py-5 px-lg-5">
+  <horizon-title class="w-100" [title]="mainTitle"></horizon-title>
+  
+  <div class="f-child-full-space d-flex justify-content-center align-items-center flex-wrap w-100 py-5 px-lg-5">
+    <div *ngFor="let mainOption of mainPanOptions; let i = index" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 px-4 py-2">
+      <a href="#" (click)="openFloatWindow($event, i)" (contextmenu)="onRightClick($event)" class="p-main-option p-shadow-card p-no-border-rad-card p-border-none card flex-column">
+        <div class="p-option-header d-flex justify-content-center align-items-center">
+          <fa *ngIf="!mainOption.customIcon else customIcon" name="{{ mainOption.icon }}" size="5x"></fa>
+
+          <ng-template #customIcon>
+            <span class="personal-site-icon">{{ mainOption.icon }}</span>
+          </ng-template>
+        </div>
+        <div class="card-block">
+          <h3 class="second-font card-title text-center">{{ mainOption.optionName }}</h3>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</div>

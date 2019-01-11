@@ -1,0 +1,5 @@
+<div class="personal-material-btn {{ showClass }} d-flex flex-column justify-content-center align-items-center" [ngClass]="{'no-modal': isModal == false}">
+  <ng-container *ngFor="let btn of materialBtns">
+    <material-button [buttonMeta]="btn" (buttonAction)="childRequestAction($event)"></material-button>
+  </ng-container>
+</div>

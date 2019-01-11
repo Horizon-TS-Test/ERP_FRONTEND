@@ -1,0 +1,23 @@
+<div class="personal-table p-secondary-back p-no-border-rad-card card table-responsive">
+  <div class="card-header">{{ tableData.title }}</div>
+
+  <table class="table table-bordered mb-0">
+    <thead class="p-secondary-back">
+      <tr>
+        <th *ngFor="let header of tableData.columnlabels" scope="col"><strong>{{ header }}</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of tableData.rows, let i = index" [ngClass]="{ 'p-selected-row': row.isSelectedRow }" (click)="onClickRow($event, i)">
+        <ng-container *ngFor="let col of row.columns, let j = index">
+          <th *ngIf="j == 0 else restColumns" scope="row">{{ col.value }}</th>
+          <ng-template #restColumns>
+            <!--REF: https://stackoverflow.com/questions/50008477/how-to-use-property-binding-with-td-attribute-colspan-in-angular-->
+            <td [attr.colspan]="col.colspan">{{ col.value }}</td>
+            <!-------------------------------------------------->
+          </ng-template>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>

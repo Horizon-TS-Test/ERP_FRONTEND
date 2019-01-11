@@ -1,0 +1,36 @@
+<div class="personal-detail-view p-table-detail card" [ngClass]="{
+  'show': startAnimation,
+  'delete-panel': detailData.deletePanel
+}">
+  <div class="card-header d-flex justify-content-between">
+    {{ detailData.title }}
+    <div *ngIf="detailData.deletePanel" class="d-flex">
+      <a href="#" class="btn btn-sm btn-outline-danger d-flex justify-content-center align-items-center" (click)="onBtnClick($event, actionTypes.delete)"
+        (contextmenu)="$event.preventDefault()">
+        <fa name="trash" class="mr-2"></fa>
+        Eliminar
+      </a>
+      <a href="#" class="btn btn-sm btn-outline-secondary d-flex justify-content-center align-items-center ml-2"
+        (click)="onBtnClick($event, actionTypes.cancel)" (contextmenu)="$event.preventDefault()">
+        <fa name="ban" class="mr-2"></fa>
+        Cancelar
+      </a>
+    </div>
+  </div>
+
+  <ul class="list-group list-group-flush pb-0">
+    <li *ngFor="let row of detailData.rows" class="list-group-item d-flex justify-content-center align-items-center p-0">
+      <div class="d-label d-flex justify-content-start align-items-center px-3">
+        <div class="p-ilustration">
+          <fa *ngIf="!row.customIcon else customIcon" name="{{ row.icon }}"></fa>
+          <ng-template #customIcon>
+            <span class="personal-site-icon">{{ row.icon }}</span>
+          </ng-template>
+        </div>
+
+        <strong>{{ row.label }}</strong>
+      </div>
+      <div class="d-value f-child-no-auto d-flex justify-content-start align-items-center px-4">{{ row.value }}</div>
+    </li>
+  </ul>
+</div>

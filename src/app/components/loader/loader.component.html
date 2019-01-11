@@ -1,0 +1,8 @@
+<div class="col-12 py-2 d-flex justify-content-center align-items-center" [ngClass]="{ 'h-100': fullScreen }">
+  <div [ngClass]="{
+    'col-5': normalLoader,
+    'col-3': !normalLoader
+  }">
+    <img src="{{ preloader }}" width="100px">
+  </div>
+</div>

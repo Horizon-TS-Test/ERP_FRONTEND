@@ -1,0 +1,16 @@
+<div class="d-flex">
+  <a *ngFor="let titleBtn of titleBtnList; let i = index" href="#" [ngClass]="{
+      'custom-btn c-title-btn c-no-shadow-btn custom-btn-light': titleBtn.btnType == btnAppearance.light,
+      'custom-btn c-title-btn c-no-shadow-btn custom-btn-normal-opa': titleBtn.btnType == btnAppearance.normal,
+      'custom-btn c-title-btn c-no-shadow-btn custom-btn-dark-opa': titleBtn.btnType == btnAppearance.dark,
+      'custom-btn c-title-btn c-no-shadow-btn custom-btn-secondary': titleBtn.btnType == btnAppearance.secondary,
+      'custom-btn c-title-btn c-no-shadow-btn custom-btn-gray': titleBtn.btnType == btnAppearance.default,
+      'ml-2': i > 0 && titleBtn.btnType !== btnAppearance.no_border,
+      'no-border-button secondary': titleBtn.btnType == btnAppearance.no_border
+    }" (click)="handleClick($event, titleBtn.btnAction)" (contextmenu)="onRightClick($event)">
+    <fa *ngIf="!titleBtn.customIcon else customIcon" name="{{ titleBtn.icon }}"></fa>
+    <ng-template #customIcon>
+      <span class="personal-site-icon">{{ titleBtn.icon }}</span>
+    </ng-template>
+  </a>
+</div>

@@ -1,0 +1,42 @@
+<div class="fixed-background {{ backgroundClass }}" [ngClass]="{
+    'opacity-light': _dynaContent.contentType == contentTypes.comment_input || _dynaContent.contentType == contentTypes.support_list,
+    'opacity-almost-null': _dynaContent.contentType == contentTypes.view_comments && _dynaContent.contentData.halfModal
+  }"></div>
+
+<div class="min-height-full-modal max-height-full-modal p-overflow-auto personal-dyna-cont horizon-modal {{ showClass }} col-12 p-0"
+  [ngClass]="{
+    'personal-content': fullDisplay
+}">
+
+  <a href="#" *ngIf="_dynaContent.contentType == contentTypes.view_replies || _dynaContent.contentType == contentTypes.view_notifs || _dynaContent.contentType == contentTypes.view_img || _dynaContent.contentType == contentTypes.comment_input || (_dynaContent.contentType == contentTypes.view_comments && _dynaContent.contentData.halfModal) || _dynaContent.contentType == contentTypes.support_list"
+    (click)="onClickClose($event)" class="absolute-background"></a>
+
+  <div class="{{ showClass }}" [ngClass]="{
+      'personal-dyna-down': _dynaContent.contentType == contentTypes.view_replies || _dynaContent.contentType == contentTypes.comment_input || _dynaContent.contentData.halfModal || _dynaContent.contentType == contentTypes.view_notifs,
+      'personal-dyna-up': _dynaContent.contentType == contentTypes.support_list,
+      'col-12 p-0': _dynaContent.contentType != contentTypes.view_img,
+      'personal-content': _dynaContent.contentType != contentTypes.view_img && !_dynaContent.contentData.transparent
+    }">
+
+    <ng-container *ngIf="modalReady; else loader">
+
+      <ng-container [ngSwitch]="_dynaContent.contentType">
+
+        <!--new-pub *ngSwitchCase="contentTypes.new_pub" [showClass]="showClass" (closeModal)="close($event)"></new-pub-->
+
+        <!--ng-container *ngSwitchCase="contentTypes.view_comments">
+          <comment-modal *ngIf="!_dynaContent.contentData.halfModal" [showClass]="showClass" [pubId]="_dynaContent.contentData.pubId"
+            [hideBtn]="_dynaContent.contentData.hideBtn" [commentId]="_dynaContent.contentData.comId" [replyId]="_dynaContent.contentData.replyId"
+            (closeModal)="close($event)"></comment-modal>
+
+          <comment-modal *ngIf="_dynaContent.contentData.halfModal" [pubId]="_dynaContent.contentData.pubId" [hideBtn]="_dynaContent.contentData.hideBtn"
+            [transparent]="_dynaContent.contentData.transparent" [halfModal]="_dynaContent.contentData.halfModal"></comment-modal>
+        </ng-container-->
+      </ng-container>
+    </ng-container>
+
+    <ng-template #loader>
+      <loader [normalLoader]="fullLoader" [fullScreen]="fullLoader"></loader>
+    </ng-template>
+  </div>
+</div>

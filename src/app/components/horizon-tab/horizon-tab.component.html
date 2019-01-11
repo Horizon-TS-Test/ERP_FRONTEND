@@ -1,0 +1,20 @@
+<div class="d-flex" [ngClass]="{ 'flex-column': verticalColumn }">
+  <div *ngFor="let tab of tabList; let i = index" class="custom-btn c-no-shadow-btn custom-tab-btn" [ngClass]="{
+    'no-opened-tab': !tab.opened,
+    'maximized-tab': tab.maximized,
+    'ml-1': !verticalColumn && i > 0,
+    'mt-2': verticalColumn && i > 0,
+    'mb-1': verticalColumn && i == tabList.length - 1
+  }">
+    <a *ngIf="tab.opened" href="#" (click)="onCloseTab($event, tab.id)" (contextmenu)="onRightClick($event)" class="c-close-tab">
+      <fa name="close"></fa>
+    </a>
+    <a href="#" class="btn-label" (click)="onClickTab($event, tab.id)" (contextmenu)="onRightClick($event)">
+      <fa *ngIf="!tab.customIcon else customIcon" name="{{ tab.icon }}"></fa>
+      {{ tab.title }}
+      <ng-template #customIcon>
+        <span class="personal-site-icon">{{ tab.icon }}</span>
+      </ng-template>
+    </a>
+  </div>
+</div>

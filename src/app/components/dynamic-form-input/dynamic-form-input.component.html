@@ -1,0 +1,22 @@
+<div [formGroup]="parentForm" class="relative-background">
+  <ng-container [ngSwitch]="inputForm.inputData.controlType">
+    <input *ngSwitchCase="inputTypes.text" class="form-control" [ngClass]="{'invalid': isInvalid}" [formControlName]="inputForm.inputData.key"
+      [id]="inputForm.inputData.key" [type]="inputForm.textInputData.type" [pattern]="inputForm.textInputData.pattern"
+      [required]="inputForm.inputData.required" [readonly]="inputForm.textInputData.readonly" [placeholder]="inputForm.inputData.placeholder"
+      (ngModelChange)="onInputChange()" />
+
+    <input *ngSwitchCase="inputTypes.date" class="form-control" [ngClass]="{'invalid': isInvalid}" [formControlName]="inputForm.inputData.key"
+      [id]="inputForm.inputData.key" [type]="'date'" [max]="inputForm.dateInputData.max" [min]="inputForm.dateInputData.min"
+      [required]="inputForm.inputData.required" [placeholder]="inputForm.inputData.placeholder" (ngModelChange)="onInputChange()" />
+
+    <textarea *ngSwitchCase="inputTypes.textArea" class="form-control" [ngClass]="{'invalid': isInvalid}"
+      [formControlName]="inputForm.inputData.key" [id]="inputForm.inputData.key" [pattern]="inputForm.textareaData.pattern"
+      [cols]="inputForm.textareaData.cols" [rows]="inputForm.textareaData.rows" [required]="inputForm.inputData.required"
+      [placeholder]="inputForm.inputData.placeholder" (ngModelChange)="onInputChange()"></textarea>
+  </ng-container>
+
+  <div class="p-error-tooltip absolute-layer p-top-layer">
+    <fa name="exclamation-circle"></fa>
+    <span class="alert alert-danger" [innerHTML]="inputForm.inputData.erroMsg"></span>
+  </div>
+</div>

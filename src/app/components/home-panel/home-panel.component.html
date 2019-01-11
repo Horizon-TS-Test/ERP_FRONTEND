@@ -1,0 +1,14 @@
+<div class="p-home-panel d-flex justify-content-between align-items-center px-3">
+  <div class="d-flex align-items-center">
+    <a href="#" class="enterprice-logo" (click)="reloadApp($event)" (contextmenu)="onRightClick($event)"></a>
+    <h5 class="mb-0 ml-2">Horizon Technology Solutions</h5>
+  </div>
+
+  <div class="relative-background d-flex align-items-center h-100">
+    <horizon-tab [tabList]="tabData" (clickedTab)="maximizeWindow($event)" (closedTab)="closeWinTab($event)"></horizon-tab>
+
+    <span class="p-separator"></span>
+
+    <context-menu [contextData]="contextMenu" (onClickOption)="contextAction($event)"></context-menu>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<a *ngIf="showMenuCrystal" href="#" class="dark-crystal light modal-menu" (click)="closeModalMenu($event)"
+  (contextmenu)="$event.preventDefault()" [ngClass]="{ 'show-crystal': showModalMenu }"></a>
+
+<div class="p-pop-over-menu p-no-border-rad-card card" [ngClass]="{ 'show-submenu': showModalMenu }">
+
+  <div class="pop-menu-title">
+    Submenú Modal
+  </div>
+
+  <ul class="f-child-full-space pop-sub-menu list-group list-group-flush pb-0">
+    <a href="#" class="list-group-item d-flex justify-content-start align-items-center">
+      <div class="generic-option selectable">
+        <fa name="tags"></fa>
+        <div>Opción 1</div>
+      </div>
+    </a>
+
+    <a href="#" class="list-group-item d-flex justify-content-start align-items-center">
+      <div class="generic-option selectable">
+        <fa name="tags"></fa>
+        <div>Opción 2</div>
+      </div>
+    </a>
+
+    <a href="#" class="list-group-item d-flex justify-content-start align-items-center">
+      <div class="generic-option selectable">
+        <fa name="tags"></fa>
+        <div>Opción 3</div>
+      </div>
+    </a>
+
+    <a href="#" class="list-group-item d-flex justify-content-start align-items-center">
+      <div class="generic-option selectable">
+        <fa name="tags"></fa>
+        <div>Opción 4</div>
+      </div>
+    </a>
+  </ul>
+
+  <div class="pop-menu-title no-first-title mt-1">
+    Menú de Ventanas
+  </div>
+
+  <div class="p-search-block relative-background card-block">
+    <form [formGroup]="filterForm">
+      <input class="form-control" type="text" placeholder="Buscar Menú" formControlName="fcnFilter" (keyup)="onSearch($event)" />
+    </form>
+    <fa name="search"></fa>
+  </div>
+
+  <div class="f-scroll-child menu-window px-3 pt-2 pb-3">
+    <div class="col-12 d-flex flex-column justify-content-start">
+
+      <ng-container *ngIf="!filtering else filterContent">
+        <horizon-tab [tabList]="openedTabFilter" [verticalColumn]="true" (clickedTab)="changeWindow($event)"
+          (closedTab)="closeWinTab($event)"></horizon-tab>
+
+        <ng-container *ngIf="openedTabFilter.length > 0 && windowsFilter.length > 0">
+          <hr width="100%">
+        </ng-container>
+
+        <horizon-tab [tabList]="windowsFilter" [verticalColumn]="true" (clickedTab)="changeWindow($event)" (closedTab)="closeWinTab($event)"></horizon-tab>
+      </ng-container>
+
+      <ng-template #filterContent>
+        <loader [normalLoader]="true" [fullScreen]="true" style="flex: 1"></loader>
+      </ng-template>
+    </div>
+  </div>
+</div>

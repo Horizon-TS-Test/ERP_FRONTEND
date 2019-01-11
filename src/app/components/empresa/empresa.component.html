@@ -1,0 +1,20 @@
+<div class="d-flex px-4">
+  <action-buttons class="pt-2" [buttonList]="actionBtnList" (clickedButton)="getBtnAction($event)"></action-buttons>
+
+  <div class="pl-4 p-w-60">
+    <ng-container *ngIf="processType != null else loader">
+      <form-view *ngIf="processType == pTypes.create || processType == pTypes.update" [startAnimation]="startAnimation" [formView]="createFormView" [pushedInputValue]="pushedInputValue" [letReset]="letReset" [letSubmit]="letSubmit" [letMsg]="letMsg" (changedInput)="getChangedInput($event)" (submitedData)="getSumitedData($event)"></form-view>
+
+      <detail-view *ngIf="processType == pTypes.retrieve" [detailData]="detailData" [startAnimation]="startAnimation" (detailBtnAction)="getDetailViewBtnAction($event)"></detail-view>
+    </ng-container>
+
+    <ng-template #loader>
+      <loader [normalLoader]="true" [fullScreen]="true"></loader>
+    </ng-template>
+  </div>
+
+  <div class="pl-4 w-100">
+    <table-view [tableData]="tableData" (clickedRow)="getClickedRowId($event)"></table-view>
+  </div>
+
+</div>

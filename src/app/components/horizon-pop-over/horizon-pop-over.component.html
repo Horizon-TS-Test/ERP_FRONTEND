@@ -1,0 +1,45 @@
+<div [ngClass]="{ 'd-none': isMinimized }">
+  <div class="fixed-background opacity-almost-null {{ backgroundClass }}"></div>
+
+  <div class="personal-dyna-cont show col-12 px-4">
+    <a href="#" *ngIf="_dynaContent.contentData.closable" (click)="onClickClose($event)" class="absolute-background"></a>
+
+    <div class="personal-pop-over full-height {{ visibleClass }} p-shadow-card shadow-modal p-no-border-rad-card card">
+      <div class="f-child-no-shrink card-header d-flex pl-3">
+        <h-title-btn-list class="d-flex align-items-center" [titleBtnList]="titleBtnList" (clickedBtnAction)="handleBtnClick($event)"></h-title-btn-list>
+        <horizon-title class="w-100" [title]="_dynaContent.contentData.title"></horizon-title>
+      </div>
+
+      <div class="pop-body f-scroll-child relative-background card-block pb-2">
+        <div class="p-modal-task-bar py-1 px-3 mb-4 d-flex justify-content-between">
+          <div class="d-flex">
+            <a href="#" class="no-border-button secondary md" (contextmenu)="$event.preventDefault()" title="Importar como">
+              <fa name="upload"></fa>
+            </a>
+            <a href="#" class="no-border-button secondary md ml-1" (contextmenu)="$event.preventDefault()" title="Imprimir">
+              <fa name="print"></fa>
+            </a>
+            <a href="#" class="no-border-button secondary md ml-1" (contextmenu)="$event.preventDefault()" title="Exportar como">
+              <fa name="download"></fa>
+            </a>
+          </div>
+
+          <a href="#" class="no-border-button secondary md" (click)="openModalMenu($event)" (contextmenu)="$event.preventDefault()"
+            title="Panel de opciones">
+            <fa name="bars"></fa>
+          </a>
+        </div>
+
+        <ng-container [ngSwitch]="_dynaContent.contentType">
+          <!--find-accounts *ngSwitchCase="contentTypes.find_accounts" (closePop)="closePopFromChild($event)"></find-accounts-->
+
+          <empresa></empresa>
+        </ng-container>
+      </div>
+
+      <div class="card-footer">
+        fotoer
+      </div>
+    </div>
+  </div>
+</div>

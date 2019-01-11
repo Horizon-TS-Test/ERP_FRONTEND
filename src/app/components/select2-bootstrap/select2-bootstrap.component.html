@@ -1,0 +1,9 @@
+<div class="col-12 p-0">
+  <div class="w-100">
+    <select id="{{ fcName }}" class="personal-select2" aria-describedby="basic-addon1">
+      <option *ngFor="let select of select2Data" value="{{select.value}}" [selected]="select.selectedItem">
+        {{select.data}}
+      </option>
+    </select>
+  </div>
+</div>

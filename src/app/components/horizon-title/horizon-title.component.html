@@ -1,0 +1,25 @@
+<div class="p-title" [ngClass]="{ 't-modal': title.modalTitle }">
+  <span *ngIf="title.modalTitle"></span>
+
+  <h1 *ngIf="!title.modalTitle">
+    <span [ngClass]="{ 'personal-site-icon': title.customIcon }">
+      <fa *ngIf="!title.customIcon else customIcon" name="{{ title.icon }}"></fa>
+      <ng-template #customIcon>
+        {{ title.icon }}
+      </ng-template>
+    </span>
+    {{ title.text }}
+  </h1>
+
+  <h3 *ngIf="title.modalTitle">
+    {{ title.text }}
+    <span [ngClass]="{ 'personal-site-icon': title.customIcon }">
+      <fa *ngIf="!title.customIcon else customIcon" name="{{ title.icon }}"></fa>
+      <ng-template #customIcon>
+        {{ title.icon }}
+      </ng-template>
+    </span>
+  </h3>
+
+  <span *ngIf="!title.modalTitle"></span>
+</div>
