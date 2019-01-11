@@ -29,6 +29,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
   public openedTabFilter: Tab[];
   public windowsFilter: Tab[];
   public menuBtnClass: string;
+  public showCloseFilterBtn: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,6 +45,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
     this.menuBtnClass = "";
     this.showModalMenu = false;
     this.showMenuCrystal = false;
+    this.showCloseFilterBtn = false;
   }
 
   ngOnInit() {
@@ -143,7 +145,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
    * @param event 
    */
   public closeModalMenu(event: any) {
-    if(event) {
+    if (event) {
       event.preventDefault();
     }
     this.showModalMenu = false;
@@ -176,9 +178,33 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
       }
     }
 
+    this.showCloseFilterBtn = true;
+
     setTimeout(() => {
       this.filtering = false;
     }, 300);
+  }
+
+  /**
+   * METODO PARA REMOVER EL FILTRO DEL FORMULARIO FILTRO:
+   * @param event 
+   */
+  public removeFilter(event: any) {
+    if(event) {
+      event.preventDefault();
+    }
+    if (this.filterForm.value.fcnFilter.length > 0) {
+      this.filtering = true;
+      this.showCloseFilterBtn = false;
+      
+      this.defineForm();
+      this.openedTabFilter = this.openedTabData.slice();
+      this.windowsFilter = this.noOpenedWindows.slice();
+
+      setTimeout(() => {
+        this.filtering = false;
+      }, 300);
+    }
   }
 
   /**
@@ -198,6 +224,8 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
         this._tabWindowService.changeTabWindow(event);
       }
     }
+
+    this.removeFilter(null);
   }
 
   /**
@@ -213,13 +241,16 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
       this._tabWindowService.closeWindow(event);
     }
     else {
-      if (currentTabIndex == this.openedTabData.length - 1) {
-        newFocusedTabId = this.openedTabData[currentTabIndex - 1].id;
+      if (this.openedTabData[currentTabIndex].maximized) {
+        if (currentTabIndex == this.openedTabData.length - 1) {
+          newFocusedTabId = this.openedTabData[currentTabIndex - 1].id;
+        } else if (currentTabIndex == 0) {
+          newFocusedTabId = this.openedTabData[currentTabIndex + 1].id;
+        }
+        this._tabWindowService.changeTabOnCloseOne(event, newFocusedTabId);
+      } else {
+        this._tabWindowService.closeWindow(event);
       }
-      else if (currentTabIndex == 0) {
-        newFocusedTabId = this.openedTabData[currentTabIndex + 1].id;
-      }
-      this._tabWindowService.changeTabOnCloseOne(event, newFocusedTabId);
     }
   }
 

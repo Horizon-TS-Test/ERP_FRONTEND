@@ -3777,11 +3777,21 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, inp
             background: $secondary-text !important;
         }
 
-        fa {
+        .right-controls {
             position: absolute;
             top: 5px;
-            right: 10px;
-            opacity: .6;
+            right: 8px;
+
+            a {
+                fa {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+
+            > fa {
+                opacity: .6;
+            }
         }
     }
 

@@ -43,9 +43,14 @@
 
   <div class="p-search-block relative-background card-block">
     <form [formGroup]="filterForm">
-      <input class="form-control" type="text" placeholder="Buscar Menú" formControlName="fcnFilter" (keyup)="onSearch($event)" />
+      <input class="form-control" type="text" placeholder="Buscar Menú" formControlName="fcnFilter" (keyup)="onSearch($event)"/>
     </form>
-    <fa name="search"></fa>
+    <div class="right-controls d-flex">
+      <a *ngIf="showCloseFilterBtn" href="#" class="no-border-button secondary sm" (click)="removeFilter($event)">
+        <fa name="close"></fa>
+      </a>
+      <fa class="ml-2" name="search"></fa>
+    </div>
   </div>
 
   <div class="f-scroll-child menu-window px-3 pt-2 pb-3">
