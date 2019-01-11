@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { MainPanelOption } from 'src/app/interfaces/main-pan-option';
 import mainPanel from 'src/app/data/main-panel';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DynaContentService } from 'src/app/services/dyna-content.service';
 import { PopoverMenuService } from 'src/app/services/popover-menu.service';
 
 @Component({
@@ -52,7 +51,6 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
     this.listenToTabUpdates();
     this.listenToOpenNewWindow()
     this.listenToShowMenu();
-    this.addNoOpenWin();
   }
 
   /**
@@ -85,6 +83,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
         this.openedTabData = tabs;
         this.openedTabFilter = this.openedTabData.slice();
 
+        this.getWindowsMenu();
         for (let tab of this.openedTabData) {
           for (let i = 0; i < this.noOpenedWindows.length; i++) {
             if (this.noOpenedWindows[i].id == tab.id) {
@@ -92,6 +91,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
             }
           }
         }
+
         this.windowsFilter = this.noOpenedWindows.slice();
       }
     });
@@ -125,17 +125,6 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * METODO PARA ESCUCHAR CUANDO UNA VENTANA SE HA CERRADO Y DEBE APARECER EN EL MENÚ DE VENTANAS NO ABIERTAS
-   */
-  private addNoOpenWin() {
-    this.subscrip = this._tabWindowService.addNoOpenWinPopMenu$.subscribe((add: boolean) => {
-      if (add) {
-        this.getWindowsMenu();
-      }
-    });
-  }
-
-  /**
    * METODO PARA ABRIR EL MENU DEL MODAL
    * @param event 
    */
@@ -154,7 +143,9 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
    * @param event 
    */
   public closeModalMenu(event: any) {
-    event.preventDefault();
+    if(event) {
+      event.preventDefault();
+    }
     this.showModalMenu = false;
     setTimeout(() => {
       this.showMenuCrystal = false;
@@ -214,7 +205,22 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
    * @param event ID DE LA PESTAÑA-VENTANA
    */
   public closeWinTab(event: string) {
-    this._tabWindowService.closeWindow(event);
+    //TO FIND NEXT OPENED TAB THAT MUST BE FOCUS AFTER CLOSING THE CURRENT ONE:
+    let currentTabIndex = this.openedTabData.findIndex(tab => tab.id == event);
+    let newFocusedTabId;
+    if (this.openedTabData.length == 1) {
+      this.closeModalMenu(null);
+      this._tabWindowService.closeWindow(event);
+    }
+    else {
+      if (currentTabIndex == this.openedTabData.length - 1) {
+        newFocusedTabId = this.openedTabData[currentTabIndex - 1].id;
+      }
+      else if (currentTabIndex == 0) {
+        newFocusedTabId = this.openedTabData[currentTabIndex + 1].id;
+      }
+      this._tabWindowService.changeTabOnCloseOne(event, newFocusedTabId);
+    }
   }
 
   ngOnDestroy() {

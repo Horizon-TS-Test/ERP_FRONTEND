@@ -19,9 +19,6 @@ export class TabWindowService {
   private openWinByIdSub = new BehaviorSubject<string>(null);
   openWinById$: Observable<string> = this.openWinByIdSub.asObservable();
   
-  private addNoOpenWinPopMenuSub = new BehaviorSubject<boolean>(null);
-  addNoOpenWinPopMenu$: Observable<boolean> = this.addNoOpenWinPopMenuSub.asObservable();
-
   private openNewWindowSub = new BehaviorSubject<string>(null);
   openNewWindow$: Observable<string> = this.openNewWindowSub.asObservable();
 
@@ -60,11 +57,8 @@ export class TabWindowService {
     if (removedWinIndex != -1) {
       this.windowTabList.splice(removedWinIndex, 1);
       this.tabList.splice(removedWinIndex, 1);
-      this.updateTabSub.next(this.tabList);
-      //THIS LINE MUST BE AT THE END OF THIS BLOCK:
-      this.addNoOpenWinPopMenuSub.next(true);
-      ////
     }
+    this.updateTabSub.next(this.tabList);
   }
 
   /**
@@ -125,6 +119,14 @@ export class TabWindowService {
    */
   public onOpenNewWindow(justOpenedWinId: string) {
     this.openNewWindowSub.next(justOpenedWinId);
+  }
+
+  /**
+   * METODO PARA CERRAR UNA VENTANA Y UN TAB Y LUEGO MAXIMIZAR OTRA VENTANA QUE ESTE MINIMIZADA
+   */
+  public changeTabOnCloseOne(closedTabId: string, changedTabId:string) {
+    this.closeWindow(closedTabId);
+    this.maximizeWindow(changedTabId);
   }
 
 }
