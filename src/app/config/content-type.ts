@@ -1,3 +1,4 @@
 export const CONTENT_TYPES = {
-    enterpriseWindow: 0,
+    enterpriseWindow: 1,
+    inventoryWindow: 2
 }

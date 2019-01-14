@@ -10,35 +10,33 @@
         <horizon-title class="w-100" [title]="_dynaContent.contentData.title"></horizon-title>
       </div>
 
-      <div class="pop-body f-scroll-child relative-background card-block pb-2">
-        <div class="p-modal-task-bar py-1 px-3 mb-4 d-flex justify-content-between">
-          <div class="d-flex">
-            <a href="#" class="no-border-button secondary md" (contextmenu)="$event.preventDefault()" title="Importar como">
-              <fa name="upload"></fa>
-            </a>
-            <a href="#" class="no-border-button secondary md ml-1" (contextmenu)="$event.preventDefault()" title="Imprimir">
-              <fa name="print"></fa>
-            </a>
-            <a href="#" class="no-border-button secondary md ml-1" (contextmenu)="$event.preventDefault()" title="Exportar como">
-              <fa name="download"></fa>
-            </a>
-          </div>
-
-          <a href="#" class="no-border-button secondary md" (click)="openModalMenu($event)" (contextmenu)="$event.preventDefault()"
-            title="Panel de opciones">
-            <fa name="bars"></fa>
+      <div class="p-modal-task-bar py-1 px-3 mb-1 d-flex justify-content-between">
+        <div class="d-flex">
+          <a href="#" class="no-border-button secondary md" (contextmenu)="$event.preventDefault()" title="Importar como">
+            <fa name="upload"></fa>
+          </a>
+          <a href="#" class="no-border-button secondary md ml-1" (contextmenu)="$event.preventDefault()" title="Imprimir">
+            <fa name="print"></fa>
+          </a>
+          <a href="#" class="no-border-button secondary md ml-1" (contextmenu)="$event.preventDefault()" title="Exportar como">
+            <fa name="download"></fa>
           </a>
         </div>
 
-        <ng-container [ngSwitch]="_dynaContent.contentType">
-          <!--find-accounts *ngSwitchCase="contentTypes.find_accounts" (closePop)="closePopFromChild($event)"></find-accounts-->
+        <a href="#" class="no-border-button secondary md" (click)="openModalMenu($event)" (contextmenu)="$event.preventDefault()"
+          title="Panel de opciones">
+          <fa name="bars"></fa>
+        </a>
+      </div>
 
-          <empresa></empresa>
-        </ng-container>
+      <div class="pop-body f-scroll-child relative-background">
+        <div class="dynamic-body">
+          <carousel-container [dynaContent]="_dynaContent"></carousel-container>
+        </div>
       </div>
 
       <div class="card-footer">
-        fotoer
+        footer
       </div>
     </div>
   </div>

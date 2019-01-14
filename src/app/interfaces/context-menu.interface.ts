@@ -1,10 +1,7 @@
-interface ContextOption {
-    icon: string;
-    text: string;
-    action: number;
-    customIcon?: boolean;
-}
+import { GenericMenuOption } from "./generic-menu-option.interface";
+
 export interface ContextMenu {
+
     hasButton: boolean;
-    options: ContextOption[];
+    options: GenericMenuOption[];
 }

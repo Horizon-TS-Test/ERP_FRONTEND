@@ -53,6 +53,9 @@ import { TableViewComponent } from './components/table-view/table-view.component
 import { DynamicFormInputComponent } from './components/dynamic-form-input/dynamic-form-input.component';
 import { PopOverMenuComponent } from './components/pop-over-menu/pop-over-menu.component';
 import { ContextMenuComponent } from './components/context-menu/context-menu.component';
+import { InventarioComponent } from './components/inventario/inventario.component';
+import { MarcaComponent } from './components/marca/marca.component';
+import { CarouselContainerComponent } from './components/carousel-container/carousel-container.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +98,10 @@ import { ContextMenuComponent } from './components/context-menu/context-menu.com
     TableViewComponent,
     DynamicFormInputComponent,
     PopOverMenuComponent,
-    ContextMenuComponent
+    ContextMenuComponent,
+    CarouselContainerComponent,
+    InventarioComponent,
+    MarcaComponent
   ],
   imports: [
     HttpModule,
@@ -109,6 +115,6 @@ import { ContextMenuComponent } from './components/context-menu/context-menu.com
   ],
   providers: [appRoutingProviders, UserService, TabWindowService],
   bootstrap: [AppComponent],
-  entryComponents: [AlertComponent, HorizonModalComponent, HorizonNotificationComponent, HorizonPopOverComponent]
+  entryComponents: [AlertComponent, HorizonModalComponent, HorizonNotificationComponent, HorizonPopOverComponent, MarcaComponent]
 })
 export class AppModule { }

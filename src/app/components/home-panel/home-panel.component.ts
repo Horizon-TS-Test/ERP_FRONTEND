@@ -17,7 +17,7 @@ const CONFIGURATIONS = 3;
 export class HomePanelComponent implements OnInit, OnDestroy {
   private subscriptor: Subscription;
   private delSubs: Subscription;
-  private tabData: Tab[];
+  public tabData: Tab[];
 
   public isAble: boolean;
   public subsStyle: string;

@@ -6,6 +6,8 @@ import { MainPanelOption } from 'src/app/interfaces/main-pan-option';
 import mainPanel from 'src/app/data/main-panel';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PopoverMenuService } from 'src/app/services/popover-menu.service';
+import modalSubmenu from 'src/app/data/modal-submenu';
+import { GenericMenuOption } from 'src/app/interfaces/generic-menu-option.interface';
 
 @Component({
   selector: 'pop-over-menu',
@@ -17,6 +19,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
   private subscrip: Subscription;
   private openNewWinSubscrip: Subscription;
   private showMenuSubscrip: Subscription;
+  private currentWinId: string;
 
   public showModalMenu: boolean;
   public showMenuCrystal: boolean;
@@ -30,6 +33,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
   public windowsFilter: Tab[];
   public menuBtnClass: string;
   public showCloseFilterBtn: boolean;
+  public modalSubmenu: GenericMenuOption[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,6 +57,19 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
     this.listenToTabUpdates();
     this.listenToOpenNewWindow()
     this.listenToShowMenu();
+  }
+
+  /**
+   * METODO PARA DEFINIR LOS SUBMENUS DEL MODAL ABIERTO
+   */
+  private defineSubmenu() {
+    let submenus = modalSubmenu;
+    this.modalSubmenu = null;
+    for (let sub of submenus) {
+      if (sub.windowId == this.currentWinId) {
+        this.modalSubmenu = sub.submenus;
+      }
+    }
   }
 
   /**
@@ -82,6 +99,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
   private listenToTabUpdates() {
     this.subscriptor = this._tabWindowService.updateTab$.subscribe((tabs: Tab[]) => {
       if (tabs) {
+        //PARA EL MENU DE VENTAS:
         this.openedTabData = tabs;
         this.openedTabFilter = this.openedTabData.slice();
 
@@ -91,10 +109,17 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
             if (this.noOpenedWindows[i].id == tab.id) {
               this.noOpenedWindows.splice(i, 1);
             }
+            //PARA GUARDAR EL ID DEL TAB MAXIMIZADO Y CARGAR SUS SUBMENUS:
+            if (tab.maximized) {
+              this.currentWinId = tab.id;
+              this.defineSubmenu();
+            }
+            ///
           }
         }
 
         this.windowsFilter = this.noOpenedWindows.slice();
+        ////
       }
     });
   }
@@ -106,6 +131,11 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
   private listenToOpenNewWindow() {
     this.openNewWinSubscrip = this._tabWindowService.openNewWindow$.subscribe((justOpenedWinID: string) => {
       if (justOpenedWinID) {
+        //PARA GUARDAR EL ID DEL TAB MAXIMIZADO Y CARGAR SUS SUBMENUS:
+        this.currentWinId = justOpenedWinID;
+        this.defineSubmenu();
+        ////
+
         let index = this.noOpenedWindows.findIndex(window => window.id == justOpenedWinID);
         if (index !== -1) {
           this.noOpenedWindows.splice(index, 1);
@@ -178,7 +208,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
       }
     }
 
-    if(filterText.length > 0) {
+    if (filterText.length > 0) {
       this.showCloseFilterBtn = true;
     }
     else {
@@ -195,13 +225,13 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
    * @param event 
    */
   public removeFilter(event: any) {
-    if(event) {
+    if (event) {
       event.preventDefault();
     }
     if (this.filterForm.value.fcnFilter.length > 0) {
       this.filtering = true;
       this.showCloseFilterBtn = false;
-      
+
       this.defineForm();
       this.openedTabFilter = this.openedTabData.slice();
       this.windowsFilter = this.noOpenedWindows.slice();
@@ -257,6 +287,15 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
         this._tabWindowService.closeWindow(event);
       }
     }
+  }
+
+  /**
+   *  METODO PARA EJECUTAR UNA ACCION AL DAR CLICK EN UNA OPCION DEL SUBMENU
+   * @param event 
+   */
+  public onSubmenuClick(event: any, index: number) {
+    event.preventDefault();
+    this._popoverMenuService.onClickModalSubmenuOption({ windowId: this.currentWinId, submenuAction: this.modalSubmenu[index].action });
   }
 
   ngOnDestroy() {

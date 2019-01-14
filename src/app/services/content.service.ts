@@ -1,6 +1,5 @@
 import { Injectable, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { DynaContent } from '../interfaces/dyna-content.interface';
-import { CONTENT_TYPES } from '../config/content-type';
 
 declare var $: any;
 
@@ -40,17 +39,6 @@ export class ContentService {
         component.addClass("personal-fadein");
       }
     }, 0);
-  }
-
-  /**
-   * METODO PARA CENTRAR HORIZONTALMENTE CUALQUIER ELEMENTO DEL DOM
-   * @param element ELEMENTO A SER CENTRADO
-   */
-  centerElement(element: any) {
-    let elHalfWidth = Math.trunc(element.width() / 2);
-    let windowMid = Math.trunc($(window).width() / 2);
-
-    element.offset({ left: (windowMid - elHalfWidth) });
   }
 
   /**
@@ -118,7 +106,7 @@ export class ContentService {
   }
 
   /**
-   * METODO PARA AÑADIR DINÁMICAMENTE UN COMPONENTE E INCRUSTARLO EN EL DOM A TRAVÉS DE CÓDIGO TYPESCRIPT:
+   * METODO PARA AÑADIR DINAMICAMENTE UN COMPONENTE E INCRUSTARLO EN EL DOM A TRAVES DE CODIGO TYPESCRIPT:
    */
   addComponent(ChildComponent: any, cfr: ComponentFactoryResolver, compContainer: ViewContainerRef, dynaContent: DynaContent = null) {
     // check and resolve the component
@@ -129,17 +117,11 @@ export class ContentService {
     compInstance._ref = expComp;
 
     switch (dynaContent.contentType) {
-      /*case CONTENT_TYPES.alert:
-        compInstance.alertData = dynaContent.contentData;
-        break;*/
       default:
         compInstance._dynaContent = dynaContent;
         break;
     }
-
-    return compInstance;
   }
-  ////
 
   /**
    * METODO PARA DAR FOCUS A UNA OPCIÓN DE UN MENÚ

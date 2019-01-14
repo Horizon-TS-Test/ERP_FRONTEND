@@ -1,0 +1,15 @@
+<div class="absolute-layer p-top-layer p-left-layer p-idex-0 w-100 h-100">
+  <loader [normalLoader]="true" [fullScreen]="true"></loader>
+</div>
+<div class="p-overflow-x-hidden pt-3 pb-2 h-100">
+  <div class="personal-carousel {{ mainContentClass }}">
+    <ng-container *ngIf="currentContent" [ngSwitch]="mainContent">
+      <empresa *ngSwitchCase="contentTypes.enterpriseWindow"></empresa>
+      <inventario *ngSwitchCase="contentTypes.inventoryWindow"></inventario>
+    </ng-container>
+
+    <!-- SUB COMPONENTES DINÁMICOS -->
+    <div #dynaSubComponent></div>
+  </div>
+
+</div>
