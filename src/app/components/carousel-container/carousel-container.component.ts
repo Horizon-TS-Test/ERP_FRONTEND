@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ViewContainerRef, ComponentFactoryResolver, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { PopoverMenuService } from 'src/app/services/popover-menu.service';
 import { Subscription } from 'rxjs';
 import { CONTENT_TYPES } from 'src/app/config/content-type';
@@ -16,13 +16,16 @@ const PREV_CLASS = 'prev';
   templateUrl: './carousel-container.component.html',
   styleUrls: ['./carousel-container.component.scss']
 })
-export class CarouselContainerComponent implements OnInit, OnDestroy {
+export class CarouselContainerComponent implements OnInit, OnDestroy, OnChanges {
   @Input() dynaContent: DynaContent;
+  @Input() showSecondContent: boolean;
   @ViewChild("dynaSubComponent", { read: ViewContainerRef }) dynaSubContentRef: ViewContainerRef;
+  @Output() secondContent: EventEmitter<boolean>;
 
   private subscriptor: Subscription;
   private currentWindowId: string;
   private currentSubMenuAction: number;
+  private dynaComponentRef: any;
 
   public contentTypes: any;
   public mainContentClass: string;
@@ -38,6 +41,7 @@ export class CarouselContainerComponent implements OnInit, OnDestroy {
   ) {
     this.contentTypes = CONTENT_TYPES;
     this.currentContent = true;
+    this.secondContent = new EventEmitter<boolean>();
   }
 
   ngOnInit() {
@@ -60,10 +64,10 @@ export class CarouselContainerComponent implements OnInit, OnDestroy {
    * METODO PARA DEFINIR EL CONTENIDO SECUNDARIO A MOSTRAR:
    * @param actionType 
    */
-  private iniCarouselAnimation() {
+  private iniCarouselAnimation(isMainContent: boolean) {
     this.mainContentClass = PREV_CLASS;
     setTimeout(() => {
-      this.currentContent = false;
+      this.currentContent = isMainContent;
       this.mainContentClass = NEXT_CLASS;
       setTimeout(() => {
         this.mainContentClass = '';
@@ -94,9 +98,22 @@ export class CarouselContainerComponent implements OnInit, OnDestroy {
   private defineDynaSubContent() {
     switch (this.currentSubMenuAction) {
       case SUBMENU_ACTIONS.marcas:
-        this._contentService.addComponent(MarcaComponent, this._componentFactoryResolver, this.dynaSubContentRef, { contentType: this.currentSubMenuAction, contentData: null });
-        this.iniCarouselAnimation();
+        this.dynaComponentRef = this._contentService.addComponent(MarcaComponent, this._componentFactoryResolver, this.dynaSubContentRef, { contentType: this.currentSubMenuAction, contentData: null });
+        this.iniCarouselAnimation(false);
+        this.secondContent.emit(true);
         break;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for(let property in changes) {
+      if(property == 'showSecondContent') {
+        if(changes[property].currentValue == false) {
+          this.dynaComponentRef.destroy();
+          this.currentSubMenuAction = null;
+          this.iniCarouselAnimation(true);
+        }
+      }
     }
   }
 

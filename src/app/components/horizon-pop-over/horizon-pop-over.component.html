@@ -11,7 +11,11 @@
       </div>
 
       <div class="p-modal-task-bar py-1 px-3 mb-1 d-flex justify-content-between">
-        <div class="d-flex">
+        <a *ngIf="secondaryContent" href="#" class="no-border-button secondary md" (click)="hideSecondContent($event)" (contextmenu)="$event.preventDefault()" title="Atrás">
+          <fa name="chevron-left"></fa>
+        </a>
+
+        <div class="f-child-no-auto d-flex justify-content-end align-items-center">
           <a href="#" class="no-border-button secondary md" (contextmenu)="$event.preventDefault()" title="Importar como">
             <fa name="upload"></fa>
           </a>
@@ -21,17 +25,20 @@
           <a href="#" class="no-border-button secondary md ml-1" (contextmenu)="$event.preventDefault()" title="Exportar como">
             <fa name="download"></fa>
           </a>
+
+          <span class="p-separator"></span>
+
+          <a href="#" class="no-border-button secondary md mr-2" (click)="openModalMenu($event)" (contextmenu)="$event.preventDefault()"
+            title="Panel de opciones">
+            <fa name="bars"></fa>
+          </a>
         </div>
 
-        <a href="#" class="no-border-button secondary md" (click)="openModalMenu($event)" (contextmenu)="$event.preventDefault()"
-          title="Panel de opciones">
-          <fa name="bars"></fa>
-        </a>
       </div>
 
-      <div class="pop-body f-scroll-child relative-background">
+      <div class="pop-body f-child-no-auto relative-background">
         <div class="dynamic-body">
-          <carousel-container [dynaContent]="_dynaContent"></carousel-container>
+          <carousel-container [dynaContent]="_dynaContent" [showSecondContent]="secondaryContent" (secondContent)="onSecondContent($event)"></carousel-container>
         </div>
       </div>
 

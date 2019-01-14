@@ -18,6 +18,7 @@ import { PopoverMenuService } from 'src/app/services/popover-menu.service';
 export class HorizonPopOverComponent implements OnInit, OnDestroy {
   private subscriber: Subscription;
   private subscriberMin: Subscription;
+  private secondaryContent: boolean;
 
   public _ref: any;
   public _selfInstance: any;
@@ -147,6 +148,25 @@ export class HorizonPopOverComponent implements OnInit, OnDestroy {
   public openModalMenu(event: any) {
     event.preventDefault();
     this._popoverMenuService.showModalMenu();
+  }
+
+  /**
+   * METODO PARA SABER QUE UN SUBMENU HA SIDO MOSTRADO Y QUE HAY QUE MOSTRAR EL BOTON ATRAS
+   * @param event 
+   */
+  public onSecondContent(event: boolean) {
+    setTimeout(() => {
+      this.secondaryContent = true;
+    }, 1000);
+  }
+
+  /**
+   * METODO PARA CAPTURAR EL CLICK DEL BOTON ATRAS
+   * @param event 
+   */
+  public hideSecondContent(event: any) {
+    event.preventDefault();
+    this.secondaryContent = false;
   }
 
   /**

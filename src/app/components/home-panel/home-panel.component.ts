@@ -32,16 +32,19 @@ export class HomePanelComponent implements OnInit, OnDestroy {
       hasButton: true,
       options: [
         {
+          id: 'context-op-1',
           icon: 'plus-circle',
           text: 'Añadir Empresa',
-          action: ADD_ENTERPRISE
+          action: ADD_ENTERPRISE,
         },
         {
+          id: 'context-op-2',
           icon: 'undo',
           text: 'Cambiar de Empresa',
           action: CHANGE_ENTERPRISE
         },
         {
+          id: 'context-op-3',
           icon: 'cog',
           text: 'Configuraciones',
           action: CONFIGURATIONS

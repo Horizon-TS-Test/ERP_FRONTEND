@@ -121,6 +121,7 @@ export class ContentService {
         compInstance._dynaContent = dynaContent;
         break;
     }
+    return compInstance._ref;
   }
 
   /**
