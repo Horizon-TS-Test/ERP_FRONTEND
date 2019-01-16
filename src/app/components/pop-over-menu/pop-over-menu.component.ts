@@ -60,19 +60,6 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * METODO PARA DEFINIR LOS SUBMENUS DEL MODAL ABIERTO
-   */
-  private defineSubmenu() {
-    let submenus = modalSubmenu;
-    this.modalSubmenu = null;
-    for (let sub of submenus) {
-      if (sub.windowId == this.currentWinId) {
-        this.modalSubmenu = sub.submenus;
-      }
-    }
-  }
-
-  /**
    * METODO PARA DEFINIR EL FORM-GROUP PARA FILTRO DE TABS:
    */
   public defineForm() {
@@ -91,6 +78,17 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
       this.noOpenedWindows.push({ id: option.id, icon: option.icon, title: option.optionName, customIcon: option.customIcon });
     }
     this.windowsFilter = this.noOpenedWindows.slice();
+  }
+
+  /**
+   * METODO PARA DEFINIR LOS SUBMENUS DEL MODAL ABIERTO
+   */
+  private defineSubmenu() {
+    this.modalSubmenu = null;
+    let index = modalSubmenu.findIndex(modal => modal.windowId == this.currentWinId);
+    if (index !== -1) {
+      this.modalSubmenu = modalSubmenu[index].submenus;
+    }
   }
 
   /**
@@ -228,17 +226,19 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
     if (event) {
       event.preventDefault();
     }
-    if (this.filterForm.value.fcnFilter.length > 0) {
-      this.filtering = true;
-      this.showCloseFilterBtn = false;
+    if (this.filterForm.value.fcnFilter) {
+      if (this.filterForm.value.fcnFilter.length > 0) {
+        this.filtering = true;
+        this.showCloseFilterBtn = false;
 
-      this.defineForm();
-      this.openedTabFilter = this.openedTabData.slice();
-      this.windowsFilter = this.noOpenedWindows.slice();
+        this.defineForm();
+        this.openedTabFilter = this.openedTabData.slice();
+        this.windowsFilter = this.noOpenedWindows.slice();
 
-      setTimeout(() => {
-        this.filtering = false;
-      }, 300);
+        setTimeout(() => {
+          this.filtering = false;
+        }, 300);
+      }
     }
   }
 
@@ -250,13 +250,13 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
     let index = this.openedTabData.findIndex(tab => tab.id == event);
     if (index !== -1) {
       if (!this.openedTabData[index].maximized) {
-        this._tabWindowService.changeTabWindow(event);
+        this._tabWindowService.changeTabWindow(this.currentWinId, event);
       }
     }
     else {
       index = this.noOpenedWindows.findIndex(window => window.id == event);
       if (!this.noOpenedWindows[index].maximized) {
-        this._tabWindowService.changeTabWindow(event);
+        this._tabWindowService.changeTabWindow(this.currentWinId, event);
       }
     }
 
@@ -279,7 +279,7 @@ export class PopOverMenuComponent implements OnInit, OnDestroy {
       if (this.openedTabData[currentTabIndex].maximized) {
         if (currentTabIndex == this.openedTabData.length - 1) {
           newFocusedTabId = this.openedTabData[currentTabIndex - 1].id;
-        } else if (currentTabIndex == 0) {
+        } else {
           newFocusedTabId = this.openedTabData[currentTabIndex + 1].id;
         }
         this._tabWindowService.changeTabOnCloseOne(event, newFocusedTabId);

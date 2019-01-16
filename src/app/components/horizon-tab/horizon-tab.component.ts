@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Tab } from 'src/app/interfaces/tab.interface';
+import { ContextMenu } from 'src/app/interfaces/context-menu.interface';
+
+const SHOW_CLASS = 'context-show';
 
 @Component({
   selector: 'horizon-tab',
@@ -12,7 +15,12 @@ export class HorizonTabComponent implements OnInit {
   @Output() clickedTab: EventEmitter<string>;
   @Output() closedTab: EventEmitter<string>;
 
+  public contextMenu: ContextMenu;
+  public showContextMenu: boolean;
+  public contextShow: string;
+
   constructor() {
+    this.showContextMenu = false;
     this.clickedTab = new EventEmitter<string>();
     this.closedTab = new EventEmitter<string>();
   }
@@ -46,5 +54,33 @@ export class HorizonTabComponent implements OnInit {
    */
   public onRightClick(event: any) {
     event.preventDefault();
+  }
+
+  /**
+   * METODO PARA MOSTRAR U OCULTAR EL MENU DE CONTEXTO AL DAR CLICK EN EL BOTON DE APERTURA
+   * @param event 
+   */
+  public showContext(event: any) {
+    event.preventDefault();
+    if (!this.showContextMenu) {
+      this.contextShow = SHOW_CLASS;
+    }
+    else {
+      this.contextShow = "";
+    }
+    this.showContextMenu = !this.showContextMenu;
+  }
+
+  /**
+   * METODO PARA OCULTAR EL MENU DE CONTEXTO AL DAR CLICK EN EL BOTON DE APERTURA
+   * @param event 
+   */
+  public onBlur(event: any) {
+    if (this.showContextMenu) {
+      setTimeout(() => {
+        this.contextShow = "";
+        this.showContextMenu = false;
+      }, 150);
+    }
   }
 }

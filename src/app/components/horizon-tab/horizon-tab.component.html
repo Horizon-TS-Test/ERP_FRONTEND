@@ -1,20 +1,78 @@
 <div class="d-flex" [ngClass]="{ 'flex-column': verticalColumn }">
-  <div *ngFor="let tab of tabList; let i = index" class="custom-btn c-no-shadow-btn custom-tab-btn" [ngClass]="{
-    'no-opened-tab': !tab.opened,
-    'maximized-tab': tab.maximized,
-    'ml-1': !verticalColumn && i > 0,
-    'mt-2': verticalColumn && i > 0,
-    'mb-1': verticalColumn && i == tabList.length - 1
-  }">
-    <a *ngIf="tab.opened" href="#" (click)="onCloseTab($event, tab.id)" (contextmenu)="onRightClick($event)" class="c-close-tab">
-      <fa name="close"></fa>
-    </a>
-    <a href="#" class="btn-label" (click)="onClickTab($event, tab.id)" (contextmenu)="onRightClick($event)">
-      <fa *ngIf="!tab.customIcon else customIcon" name="{{ tab.icon }}"></fa>
-      {{ tab.title }}
-      <ng-template #customIcon>
-        <span class="personal-site-icon">{{ tab.icon }}</span>
-      </ng-template>
-    </a>
-  </div>
+  <ng-container *ngIf="!verticalColumn else vertical">
+    <ng-container *ngIf="tabList.length <= 5 else globalTab">
+      <ng-container *ngFor="let tab of tabList; let i = index">
+        <div *ngIf="i < 5" class="custom-btn c-no-shadow-btn custom-tab-btn" [ngClass]="{
+        'no-opened-tab': !tab.opened,
+        'maximized-tab': tab.maximized,
+        'ml-1': i > 0
+      }">
+          <a *ngIf="tab.opened" href="#" (click)="onCloseTab($event, tab.id)" (contextmenu)="onRightClick($event)"
+            class="c-close-tab">
+            <fa name="close"></fa>
+          </a>
+          <a href="#" class="btn-label" (click)="onClickTab($event, tab.id)" (contextmenu)="onRightClick($event)">
+            <fa *ngIf="!tab.customIcon else customIcon" name="{{ tab.icon }}"></fa>
+            <ng-template #customIcon>
+              <span class="personal-site-icon">{{ tab.icon }}</span>
+            </ng-template>
+            {{ tab.title }}
+          </a>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #globalTab>
+
+      <div class="relative-background">
+        <a href="#" class="custom-btn c-no-shadow-btn custom-tab-menu-btn" (blur)="onBlur($event)" (click)="showContext($event)"
+          (contextmenu)="onRightClick($event)">
+          <fa name="th"></fa>
+        </a>
+
+        <div class="p-context-menu table-body {{ contextShow }} p-no-border-rad-card card p-1">
+          <ng-container *ngFor="let tab of tabList; let i = index">
+            <div class="custom-btn c-no-shadow-btn custom-tab-btn circle-tab my-1 mx-2" [ngClass]="{
+                'no-opened-tab': !tab.opened,
+                'maximized-tab': tab.maximized
+              }">
+              <a *ngIf="tab.opened" href="#" (click)="onCloseTab($event, tab.id)" (contextmenu)="onRightClick($event)"
+                class="c-close-tab">
+                <fa name="close"></fa>
+              </a>
+              <a href="#" class="btn-label" title="{{ tab.title }}" (click)="onClickTab($event, tab.id)" (contextmenu)="onRightClick($event)">
+                <fa *ngIf="!tab.customIcon else customIcon" name="{{ tab.icon }}"></fa>
+                <ng-template #customIcon>
+                  <span class="personal-site-icon">{{ tab.icon }}</span>
+                </ng-template>
+              </a>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+    </ng-template>
+  </ng-container>
+
+  <ng-template #vertical>
+    <ng-container *ngFor="let tab of tabList; let i = index">
+      <div class="custom-btn c-no-shadow-btn custom-tab-btn" [ngClass]="{
+        'no-opened-tab': !tab.opened,
+        'maximized-tab': tab.maximized,
+        'mt-2': i > 0,
+        'mb-1': i == tabList.length - 1
+      }">
+        <a *ngIf="tab.opened" href="#" (click)="onCloseTab($event, tab.id)" (contextmenu)="onRightClick($event)" class="c-close-tab">
+          <fa name="close"></fa>
+        </a>
+        <a href="#" class="btn-label" (click)="onClickTab($event, tab.id)" (contextmenu)="onRightClick($event)">
+          <fa *ngIf="!tab.customIcon else customIcon" name="{{ tab.icon }}"></fa>
+          {{ tab.title }}
+          <ng-template #customIcon>
+            <span class="personal-site-icon">{{ tab.icon }}</span>
+          </ng-template>
+        </a>
+      </div>
+    </ng-container>
+  </ng-template>
 </div>

@@ -2,14 +2,16 @@
   <loader [normalLoader]="true" [fullScreen]="true"></loader>
 </div>
 <div class="p-overflow-x-hidden pt-3 pb-2 h-100">
-  <div class="personal-carousel {{ mainContentClass }}">
+  <div class="personal-carousel p-secondary-text-back-color {{ mainContentClass }}">
     <ng-container *ngIf="currentContent" [ngSwitch]="mainContent">
       <empresa *ngSwitchCase="contentTypes.enterpriseWindow"></empresa>
       <inventario *ngSwitchCase="contentTypes.inventoryWindow"></inventario>
     </ng-container>
 
     <!-- SUB COMPONENTES DINÁMICOS -->
-    <div #dynaSubComponent></div>
+    <div class="{{ visibilityClass }}">
+      <ng-container #dynaSubComponent></ng-container>
+    </div>
   </div>
 
 </div>

@@ -19,11 +19,23 @@ export default [
                 customIcon: false
             },
             {
-                id: 'sub-menu-2',
+                id: 'sub-menu-3',
                 icon: 'snowflake-o',
                 text: 'Marcas',
                 action: SUBMENU_ACTIONS.marcas,
                 customIcon: false
+            },
+        ]
+    },
+    {
+        windowId: 'op-pan-1',
+        submenus: [
+            {
+                id: 'sub-menu-1',
+                icon: 'location-arrow',
+                text: 'Sucursales',
+                action: SUBMENU_ACTIONS.sucursales,
+                customIcon: false,
             },
         ]
     }

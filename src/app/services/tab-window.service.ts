@@ -13,12 +13,9 @@ export class TabWindowService {
   private updateTabSub = new BehaviorSubject<Tab[]>(null);
   updateTab$: Observable<Tab[]> = this.updateTabSub.asObservable();
 
-  private forceMinimizeWinSub = new BehaviorSubject<boolean>(null);
-  forceMinimizeWin$: Observable<boolean> = this.forceMinimizeWinSub.asObservable();
-
   private openWinByIdSub = new BehaviorSubject<string>(null);
   openWinById$: Observable<string> = this.openWinByIdSub.asObservable();
-  
+
   private openNewWindowSub = new BehaviorSubject<string>(null);
   openNewWindow$: Observable<string> = this.openNewWindowSub.asObservable();
 
@@ -40,7 +37,10 @@ export class TabWindowService {
     let commingWinIndex = this.windowTabList.findIndex(winTab => winTab.mainPanOptionData.id == windowData.mainPanOptionData.id);
     if (commingWinIndex == -1) {
       this.windowTabList.push(windowData);
-      this.tabList.push({ id: windowData.mainPanOptionData.id, title: windowData.mainPanOptionData.optionName, icon: windowData.mainPanOptionData.icon, customIcon: windowData.mainPanOptionData.customIcon, opened: true });
+      for (let tab of this.tabList) {
+        tab.maximized = false;
+      }
+      this.tabList.push({ id: windowData.mainPanOptionData.id, title: windowData.mainPanOptionData.optionName, icon: windowData.mainPanOptionData.icon, customIcon: windowData.mainPanOptionData.customIcon, opened: true, maximized: true });
       this.updateTabSub.next(this.tabList);
     }
     else {
@@ -59,6 +59,18 @@ export class TabWindowService {
       this.tabList.splice(removedWinIndex, 1);
     }
     this.updateTabSub.next(this.tabList);
+  }
+
+  /**
+   * METODO PARA MAXIMIZAR UNA VENTANA HECHA PESTAÑA
+   * @param windowId ID DE LA PESTAÑA-VENTANA
+   */
+  public minimizeWindow(windowId: string) {
+    let minTab = this.tabList.find(tab => tab.id == windowId);
+    if (minTab) {
+      minTab.maximized = false;
+      this.updateTabSub.next(this.tabList);
+    }
   }
 
   /**
@@ -109,8 +121,12 @@ export class TabWindowService {
   /**
    * METODO PARA CAMBIAR DE VENTANA AL DAR CLICK EN OTRA PESTAÑA
    */
-  public changeTabWindow(openWindowById: string) {
-    this.forceMinimizeWinSub.next(true);
+  public changeTabWindow(minimizedWinId: string, openWindowById: string) {
+    for (let win of this.windowTabList) {
+      if (win.mainPanOptionData.id == minimizedWinId) {
+        win.componentInstance.minimizePopOver();
+      }
+    }
     this.openWinByIdSub.next(openWindowById);
   }
 
@@ -124,7 +140,7 @@ export class TabWindowService {
   /**
    * METODO PARA CERRAR UNA VENTANA Y UN TAB Y LUEGO MAXIMIZAR OTRA VENTANA QUE ESTE MINIMIZADA
    */
-  public changeTabOnCloseOne(closedTabId: string, changedTabId:string) {
+  public changeTabOnCloseOne(closedTabId: string, changedTabId: string) {
     this.closeWindow(closedTabId);
     this.maximizeWindow(changedTabId);
   }

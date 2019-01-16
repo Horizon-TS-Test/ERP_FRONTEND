@@ -17,7 +17,6 @@ import { PopoverMenuService } from 'src/app/services/popover-menu.service';
 })
 export class HorizonPopOverComponent implements OnInit, OnDestroy {
   private subscriber: Subscription;
-  private subscriberMin: Subscription;
   private secondaryContent: boolean;
 
   public _ref: any;
@@ -39,19 +38,23 @@ export class HorizonPopOverComponent implements OnInit, OnDestroy {
       { icon: 'close', btnType: BTN_APPEARANCE.no_border, btnAction: ACTION_TYPES.close },
       { icon: 'minus', btnType: BTN_APPEARANCE.no_border, btnAction: ACTION_TYPES.minimize }
     ]
-
-    this.listenToClosePop();
-    this.listenToMinimizePop();
-
     this.isMinimized = false;
-
+    this.listenToClosePop();
   }
 
   ngOnInit() {
     setTimeout(() => {
       this.backgroundClass = "on"
       this.visibleClass = "is-visible"
-    }, 100);
+      this.generateTab();
+    }, 200);
+  }
+
+  /**
+   * METODO PARA CREAR UNA PESTAÑA ASOCIADA A LA VENTANA ACTUAL
+   */
+  private generateTab() {
+    this._tabWindowService.makeWindowTab({ componentInstance: this._selfInstance, mainPanOptionData: <MainPanelOption>this._dynaContent.contentData.mainPanOption });
   }
 
   /**
@@ -61,17 +64,6 @@ export class HorizonPopOverComponent implements OnInit, OnDestroy {
     this.subscriber = this._dynaContentService.removeDynaCont$.subscribe((closeIt: boolean) => {
       if (closeIt) {
         this.closePopOver();
-      }
-    });
-  }
-
-  /**
-   * METODO PARA ESCUCHAR LA PETICION DE MINIMIZAR EL POP OVER ABIERTO ACTUALMENTE
-   */
-  private listenToMinimizePop() {
-    this.subscriberMin = this._tabWindowService.forceMinimizeWin$.subscribe((minIt: boolean) => {
-      if (minIt && this.isMinimized == false) {
-        this.minimizePopOver();
       }
     });
   }
@@ -124,9 +116,9 @@ export class HorizonPopOverComponent implements OnInit, OnDestroy {
     this.backgroundClass = ""
     this.visibleClass = ""
 
-    this._tabWindowService.makeWindowTab({ componentInstance: this._selfInstance, mainPanOptionData: <MainPanelOption>this._dynaContent.contentData.mainPanOption });
     setTimeout(() => {
       this.isMinimized = true;
+      this._tabWindowService.minimizeWindow(this._dynaContent.contentData.mainPanOption.id);
     }, 300);
   }
 
@@ -186,6 +178,5 @@ export class HorizonPopOverComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriber.unsubscribe();
-    this.subscriberMin.unsubscribe();
   }
 }

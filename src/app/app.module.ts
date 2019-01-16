@@ -56,6 +56,7 @@ import { ContextMenuComponent } from './components/context-menu/context-menu.com
 import { InventarioComponent } from './components/inventario/inventario.component';
 import { MarcaComponent } from './components/marca/marca.component';
 import { CarouselContainerComponent } from './components/carousel-container/carousel-container.component';
+import { SucursalComponent } from './components/sucursal/sucursal.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { CarouselContainerComponent } from './components/carousel-container/caro
     ContextMenuComponent,
     CarouselContainerComponent,
     InventarioComponent,
-    MarcaComponent
+    MarcaComponent,
+    SucursalComponent
   ],
   imports: [
     HttpModule,
@@ -115,6 +117,6 @@ import { CarouselContainerComponent } from './components/carousel-container/caro
   ],
   providers: [appRoutingProviders, UserService, TabWindowService],
   bootstrap: [AppComponent],
-  entryComponents: [AlertComponent, HorizonModalComponent, HorizonNotificationComponent, HorizonPopOverComponent, MarcaComponent]
+  entryComponents: [AlertComponent, HorizonModalComponent, HorizonNotificationComponent, HorizonPopOverComponent, MarcaComponent, SucursalComponent]
 })
 export class AppModule { }

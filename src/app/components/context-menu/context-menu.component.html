@@ -1,20 +1,26 @@
-<a *ngIf="contextData.hasButton" href="#" class="no-border-button secondary md" (blur)="onBlur($event)" (click)="showContext($event)"
-  (contextmenu)="onRightClick($event)">
-  <fa name="ellipsis-v"></fa>
-</a>
+<div class="relative-background">
+  <a *ngIf="contextData.hasButton" href="#" class="{{ contextData.btnCustomClass }}" [ngClass]="{ 'no-border-button secondary md': !contextData.btnCustomClass }"
+    (blur)="onBlur($event)" (click)="showContext($event)" (contextmenu)="onRightClick($event)">
+    <fa *ngIf="!contextData.btnCustomIcon else btnCustomIcon" name="{{ contextData.btnIcon ? contextData.btnIcon : 'ellipsis-v' }}"></fa>
+    
+    <ng-template #btnCustomIcon>
+      <span class="personal-site-icon">{{ contextData.btnIcon }}</span>
+    </ng-template>
+  </a>
 
-<div class="p-context-menu p-no-border-rad-card card {{ contextShow }}">
-  <ul class="list-group list-group-flush pb-0">
-    <a *ngFor="let option of contextData.options; let i = index" href="#" class="list-group-item d-flex justify-content-start align-items-center"
-      (contextmenu)="onRightClick($event)" (click)="onClickContOption($event, i)">
-      <div class="generic-option selectable">
-        <fa *ngIf="!option.customIcon else customIcon" name="{{ option.icon }}"></fa>
-        <ng-template #customIcon>
-          <span class="personal-site-icon">{{ option.icon }}</span>
-        </ng-template>
+  <div class="p-context-menu p-no-border-rad-card card {{ contextShow }}">
+    <ul class="list-group list-group-flush pb-0">
+      <a *ngFor="let option of contextData.options; let i = index" href="#" class="list-group-item d-flex justify-content-start align-items-center"
+        (contextmenu)="onRightClick($event)" (click)="onClickContOption($event, i)">
+        <div class="generic-option selectable">
+          <fa *ngIf="!option.customIcon else customIcon" name="{{ option.icon }}"></fa>
+          <ng-template #customIcon>
+            <span class="personal-site-icon">{{ option.icon }}</span>
+          </ng-template>
 
-        <div>{{ option.text }}</div>
-      </div>
-    </a>
-  </ul>
+          <div>{{ option.text }}</div>
+        </div>
+      </a>
+    </ul>
+  </div>
 </div>

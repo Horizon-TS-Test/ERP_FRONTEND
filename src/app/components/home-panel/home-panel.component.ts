@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { TabWindowService } from 'src/app/services/tab-window.service';
 import { Tab } from 'src/app/interfaces/tab.interface';
 import { ContextMenu } from 'src/app/interfaces/context-menu.interface';
+import { MainPanelOption } from 'src/app/interfaces/main-pan-option';
+import mainPanel from 'src/app/data/main-panel';
 
 const ADD_ENTERPRISE = 1;
 const CHANGE_ENTERPRISE = 2;
@@ -17,8 +19,9 @@ const CONFIGURATIONS = 3;
 export class HomePanelComponent implements OnInit, OnDestroy {
   private subscriptor: Subscription;
   private delSubs: Subscription;
-  public tabData: Tab[];
+  private enterpriseMainOp: MainPanelOption;
 
+  public tabData: Tab[];
   public isAble: boolean;
   public subsStyle: string;
   public switchInput: HorizonSwitchInputInterface;
@@ -27,14 +30,37 @@ export class HomePanelComponent implements OnInit, OnDestroy {
   constructor(
     private _tabWindowService: TabWindowService
   ) {
+    this.enterpriseMainOp = mainPanel[0];
     this.tabData = [];
+    this.defineContextMenu();
+  }
+
+  ngOnInit() {
+    this.listenToTabUpdates();
+  }
+
+  /**
+   * METODO PARA ESCUCHAR CUANDO UNA VENTANA SE HA MINIMIZADO Y DEBE SER CREADA UNA PESTAÑA ASOCIADA A LA MISMA
+   */
+  private listenToTabUpdates() {
+    this.subscriptor = this._tabWindowService.updateTab$.subscribe((tabs: Tab[]) => {
+      if (tabs) {
+        this.tabData = tabs;
+      }
+    });
+  }
+
+  /**
+   * METODO PARA DEFINIR LAS OPCIONES DE UN MENU DE CONTEXTO:
+   */
+  private defineContextMenu() {
     this.contextMenu = {
       hasButton: true,
       options: [
         {
           id: 'context-op-1',
-          icon: 'plus-circle',
-          text: 'Añadir Empresa',
+          icon: this.enterpriseMainOp.icon,
+          text: this.enterpriseMainOp.optionName,
           action: ADD_ENTERPRISE,
         },
         {
@@ -51,21 +77,6 @@ export class HomePanelComponent implements OnInit, OnDestroy {
         },
       ]
     };
-  }
-
-  ngOnInit() {
-    this.listenToTabUpdates();
-  }
-
-  /**
-   * METODO PARA ESCUCHAR CUANDO UNA VENTANA SE HA MINIMIZADO Y DEBE SER CREADA UNA PESTAÑA ASOCIADA A LA MISMA
-   */
-  private listenToTabUpdates() {
-    this.subscriptor = this._tabWindowService.updateTab$.subscribe((tabs: Tab[]) => {
-      if(tabs) {
-        this.tabData = tabs;
-      }
-    });
   }
 
   /**
@@ -106,7 +117,7 @@ export class HomePanelComponent implements OnInit, OnDestroy {
   public contextAction(action: number) {
     switch (action) {
       case ADD_ENTERPRISE:
-        console.log("ADD ENTERPRISE");
+        this._tabWindowService.loadOrMaximizeWindow(this.enterpriseMainOp);
         break;
       case CHANGE_ENTERPRISE:
         console.log("CHANGE ENTERPRISE");

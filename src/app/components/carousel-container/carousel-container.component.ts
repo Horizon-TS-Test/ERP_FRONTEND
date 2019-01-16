@@ -7,9 +7,11 @@ import { ContentService } from 'src/app/services/content.service';
 import { MarcaComponent } from '../marca/marca.component';
 import { SUBMENU_ACTIONS } from 'src/app/config/submenu-actions';
 import { MainPanelOption } from 'src/app/interfaces/main-pan-option';
+import { SucursalComponent } from '../sucursal/sucursal.component';
 
 const NEXT_CLASS = 'next';
 const PREV_CLASS = 'prev';
+const VISIBILITY_CLASS = 'p-visibility-hidden';
 
 @Component({
   selector: 'carousel-container',
@@ -33,6 +35,7 @@ export class CarouselContainerComponent implements OnInit, OnDestroy, OnChanges 
 
   public mainContent: number;
   public secondaryContOptions: number[];
+  public visibilityClass: string;
 
   constructor(
     private _popoverMenuService: PopoverMenuService,
@@ -42,6 +45,7 @@ export class CarouselContainerComponent implements OnInit, OnDestroy, OnChanges 
     this.contentTypes = CONTENT_TYPES;
     this.currentContent = true;
     this.secondContent = new EventEmitter<boolean>();
+    this.visibilityClass = VISIBILITY_CLASS;
   }
 
   ngOnInit() {
@@ -66,12 +70,16 @@ export class CarouselContainerComponent implements OnInit, OnDestroy, OnChanges 
    */
   private iniCarouselAnimation(isMainContent: boolean) {
     this.mainContentClass = PREV_CLASS;
+
     setTimeout(() => {
+      this.visibilityClass = '';
       this.currentContent = isMainContent;
       this.mainContentClass = NEXT_CLASS;
+
       setTimeout(() => {
         this.mainContentClass = '';
-      }, 300);
+      }, 500);
+
     }, 300);
 
   }
@@ -96,22 +104,40 @@ export class CarouselContainerComponent implements OnInit, OnDestroy, OnChanges 
    * METODO PARA DEFINIR EL CONTENIDO DINAMICO A MOSTRAR EN LA SEGUNDA SECCION DEL CARRUSEL
    */
   private defineDynaSubContent() {
+    let component: any;
     switch (this.currentSubMenuAction) {
       case SUBMENU_ACTIONS.marcas:
-        this.dynaComponentRef = this._contentService.addComponent(MarcaComponent, this._componentFactoryResolver, this.dynaSubContentRef, { contentType: this.currentSubMenuAction, contentData: null });
-        this.iniCarouselAnimation(false);
-        this.secondContent.emit(true);
+        component = MarcaComponent;
         break;
+      case SUBMENU_ACTIONS.sucursales:
+        component = SucursalComponent;
+        break;
+    }
+
+    if (component) {
+      this.dynaComponentRef = this._contentService.addComponent(component, this._componentFactoryResolver, this.dynaSubContentRef, { contentType: this.currentSubMenuAction, contentData: null });
+      this.iniCarouselAnimation(false);
+      this.secondContent.emit(true);
     }
   }
 
+  /**
+   * METODO PARA QUITAR EL COMPONENTE CARGADO DINAMICAMENTE, APLICANDO ANIMACION
+   */
+  private removeSynaSubContent() {
+    this.currentSubMenuAction = null;
+    this.iniCarouselAnimation(true);
+    setTimeout(() => {
+      this.dynaComponentRef.destroy();
+      this.visibilityClass = VISIBILITY_CLASS;
+    }, 300)
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    for(let property in changes) {
-      if(property == 'showSecondContent') {
-        if(changes[property].currentValue == false) {
-          this.dynaComponentRef.destroy();
-          this.currentSubMenuAction = null;
-          this.iniCarouselAnimation(true);
+    for (let property in changes) {
+      if (property == 'showSecondContent') {
+        if (changes[property].currentValue == false) {
+          this.removeSynaSubContent();
         }
       }
     }

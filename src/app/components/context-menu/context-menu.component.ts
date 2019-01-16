@@ -43,8 +43,10 @@ export class ContextMenuComponent implements OnInit {
    */
   public onBlur(event: any) {
     if (this.showContextMenu) {
-      this.contextShow = "";
-      this.showContextMenu = false;
+      setTimeout(() => {
+        this.contextShow = "";
+        this.showContextMenu = false;
+      }, 100);
     }
   }
 
@@ -53,7 +55,7 @@ export class ContextMenuComponent implements OnInit {
    * @param event 
    * @param optionIndex 
    */
-  public onClickContOption(event: any, optionIndex) {
+  public onClickContOption(event: any, optionIndex: number) {
     event.preventDefault();
     this.onClickOption.emit(this.contextData.options[optionIndex].action);
   }
